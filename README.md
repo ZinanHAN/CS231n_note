@@ -46,7 +46,6 @@ jupyter notebook
 ## Acknowledgements
 
 - [CS231n course website](http://cs231n.stanford.edu/)
-- [Fei-Fei Li, Justin Johnson, Serena Yeung, Andrej Karpathy and others](http://cs231n.stanford.edu/instructors.html)
 - All authors and contributors of the course materials
 
 ## Disclaimer
