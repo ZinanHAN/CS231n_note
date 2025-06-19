@@ -1,4 +1,5 @@
 from builtins import range
+from matplotlib.pyplot import axis
 import numpy as np
 from random import shuffle
 from past.builtins import xrange
@@ -27,9 +28,9 @@ def softmax_loss_naive(W, X, y, reg):
     dW = np.zeros_like(W)
 
     # compute the loss and the gradient
-    num_classes = W.shape[1]
-    num_train = X.shape[0]
-    for i in range(num_train):
+    N = X.shape[0]  
+    C = W.shape[1]
+    for i in range(N):
         scores = X[i].dot(W)
 
         # compute the probabilities in numerically stable way
@@ -40,9 +41,14 @@ def softmax_loss_naive(W, X, y, reg):
 
         loss -= logp[y[i]]  # negative log probability is the loss
 
+        for j in range(C):
+          if j == y[i]:
+              dW[:, j] -= X[i]  # Correct class
+          dW[:, j] += p[j] * X[i]  # All classes
+
 
     # normalized hinge loss plus regularization
-    loss = loss / num_train + reg * np.sum(W * W)
+    loss = loss / C + reg * np.sum(W * W)
 
     #############################################################################
     # TODO:                                                                     #
@@ -53,6 +59,8 @@ def softmax_loss_naive(W, X, y, reg):
     # code above to compute the gradient.                                       #
     #############################################################################
 
+    # Average gradients and add regularization gradient
+    dW = dW / N + 2 * reg * W
 
     return loss, dW
 
@@ -73,7 +81,18 @@ def softmax_loss_vectorized(W, X, y, reg):
     # Implement a vectorized version of the softmax loss, storing the           #
     # result in loss.                                                           #
     #############################################################################
-
+    
+    # compute the loss and the gradient
+    N = X.shape[0]  
+    C = W.shape[1]
+    scores = X.dot(W)
+    # compute the probabilities in numerically stable way
+    scores -= np.max(scores,axis = 1,keepdims=True)
+    p = np.exp(scores)
+    p /= p.sum(axis =1,keepdims=True)  # normalize
+    logp = np.log(p)
+    loss -= np.sum(logp[np.arange(N), y]) / N
+    loss += reg * np.sum(W * W)
 
     #############################################################################
     # TODO:                                                                     #
@@ -84,6 +103,10 @@ def softmax_loss_vectorized(W, X, y, reg):
     # to reuse some of the intermediate values that you used to compute the     #
     # loss.                                                                     #
     #############################################################################
-
+    dp = p  
+    dp[np.arange(N), y] -= 1
+    dp /= N
+    dW = X.T.dot(dp)
+    dW += 2 * reg * W
 
     return loss, dW
