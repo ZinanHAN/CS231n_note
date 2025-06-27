@@ -1,4 +1,4 @@
-# CS231n_note
+# CS231n_note_2025
 
 # CS231n: Convolutional Neural Networks for Visual Recognition
 
@@ -50,6 +50,6 @@ jupyter notebook
 
 ## Disclaimer
 
-This repository is for personal learning and reference only. Please **do not plagiarize** any assignment solutions if you are currently taking the course.
+This repository is for personal learning and reference only. 
 
 ---
